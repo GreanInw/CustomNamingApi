@@ -49,5 +49,14 @@ namespace POC_NamingApi.Helpers
             return defaultModel.Attributes.Attributes.FirstOrDefault(s
                 => s.GetType().GetInterface(nameof(ISnakeCaseAttribute), true) is not null) as ISnakeCaseAttribute;
         }
+
+        public static string ConvertToCamelCase(string source)
+        {
+            var parts = source.Split(new[] { '_' }, StringSplitOptions.RemoveEmptyEntries);
+            return $"{parts.First().ToLower()}{string.Join("", parts.Skip(1).Select(ConvertToCapital))}";
+        }
+
+        public static string ConvertToCapital(string source) 
+            => string.Format("{0}{1}", char.ToUpper(source[0]), source.Substring(1).ToLower());
     }
 }
