@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>POC_NamingApi</name>
+    </assembly>
+    <members>
+        <member name="T:POC_NamingApi.Filters.SnakeCaseQueryParametersApiDescriptionProvider">
+            <summary>
+            Rename parameter from <see cref="T:Microsoft.AspNetCore.Mvc.FromFormAttribute"/>, <see cref="T:Microsoft.AspNetCore.Mvc.FromQueryAttribute"/> 
+            to naming snake_case.
+            </summary>
+        </member>
+        <member name="M:POC_NamingApi.Helpers.JsonHelpers.GetDefaultJsonSerializerOptions">
+            <summary>
+            Get default <see cref="T:System.Text.Json.JsonSerializerOptions"/> for snake case and property enum.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:POC_NamingApi.Helpers.JsonHelpers.GetDefaultJsonSerializerSettings">
+            <summary>
+            Get default <see cref="T:Newtonsoft.Json.JsonSerializerSettings"/> for snake case and property enum.
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
