@@ -2,7 +2,7 @@
 
 namespace POC_NamingApi.Attributes
 {
-    public interface ISnakeCaseAttribute
+    public interface ISnakeCaseNamingAttribute
     {
         string Name { get; }
         BindingSource BindingSource { get; }

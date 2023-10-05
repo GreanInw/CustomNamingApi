@@ -1,6 +1,4 @@
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using POC_NamingApi.Binders;
-using System.Web.Http.Controllers;
+using POC_NamingApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,12 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddNamingSnakeCaseRequest();
-//builder.Services.TryAddEnumerable(ServiceDescriptor.Transient<IHttpActionSelector, SnakeCaseActionSelector>());
 
-builder.Services.AddControllers(options =>
-{
-    //options.ModelBinderProviders.Insert(0, new SnakeCaseModelBinderProvider());
-}).AddSnakeCaseJsonResponse();
+builder.Services.AddControllers()
+    .AddSnakeCaseJsonResponse();
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
@@ -22,5 +17,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+//app.UseMiddleware<SnakeCaseRequestMiddleware>();
 app.MapControllers();
 app.Run();

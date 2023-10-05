@@ -1,14 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using POC_NamingApi.Binders;
+using POC_NamingApi.ModelBinders;
 
 namespace POC_NamingApi.Attributes
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    public class SnakeCaseObjectAttribute : Attribute, IModelNameProvider, IBinderTypeProviderMetadata, ISnakeCaseAttribute
+    public class SnakeCaseObjectAttribute : Attribute, ISnakeCaseNamingAttribute, IBinderTypeProviderMetadata
     {
-        public string Name => "SnakeCaseModel";
-        public Type BinderType { get; }
-        //public Type BinderType => typeof(SnakeCaseModelBinder);
+        public string Name { get; }
         public BindingSource BindingSource => BindingSource.Custom;
+        public Type BinderType => typeof(SnakeCaseModelBinder);
     }
 }

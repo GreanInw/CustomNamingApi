@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using POC_NamingApi.Builders;
 using POC_NamingApi.Helpers;
 
 namespace POC_NamingApi.Filters
@@ -24,7 +25,7 @@ namespace POC_NamingApi.Filters
                     {
                         continue;
                     }
-                    parameter.Name = parameter.Name.ToSnakeCase();
+                    parameter.Name = SnakeCaseBuilder.Build(parameter.Name);
                 }
             }
         }

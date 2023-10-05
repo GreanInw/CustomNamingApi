@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Newtonsoft.Json.Serialization;
 using POC_NamingApi.Attributes;
+using System.Reflection;
 
 namespace POC_NamingApi.Helpers
 {
@@ -21,6 +22,8 @@ namespace POC_NamingApi.Helpers
             return customAttributes.Any(w => w.AttributeType == typeof(SnakeCaseObjectAttribute));
         }
 
+        public static bool IsSnakeCaseObject(Type type) => GetSnakeCaseObjectAttribute(type) is not null;
+
         public static bool IsSnakeCaseAttribute(ApiParameterDescription parameter)
         {
             if (parameter is null) throw new ArgumentNullException(nameof(parameter));
@@ -38,7 +41,7 @@ namespace POC_NamingApi.Helpers
             return defaultModel.Attributes.Attributes.Any(w => allowTypes.Contains(w.GetType()));
         }
 
-        public static ISnakeCaseAttribute GetSnakeCaseAttribute(ApiParameterDescription parameter)
+        public static ISnakeCaseNamingAttribute GetSnakeCaseAttribute(ApiParameterDescription parameter)
         {
             if (parameter is null) throw new ArgumentNullException(nameof(parameter));
 
@@ -47,16 +50,11 @@ namespace POC_NamingApi.Helpers
                 return null;
             }
             return defaultModel.Attributes.Attributes.FirstOrDefault(s
-                => s.GetType().GetInterface(nameof(ISnakeCaseAttribute), true) is not null) as ISnakeCaseAttribute;
+                => s.GetType().GetInterface(nameof(ISnakeCaseNamingAttribute), true) is not null) as ISnakeCaseNamingAttribute;
         }
 
-        public static string ConvertToCamelCase(string source)
-        {
-            var parts = source.Split(new[] { '_' }, StringSplitOptions.RemoveEmptyEntries);
-            return $"{parts.First().ToLower()}{string.Join("", parts.Skip(1).Select(ConvertToCapital))}";
-        }
+        public static SnakeCaseObjectAttribute GetSnakeCaseObjectAttribute(Type type)
+            => type.GetCustomAttribute<SnakeCaseObjectAttribute>();
 
-        public static string ConvertToCapital(string source) 
-            => string.Format("{0}{1}", char.ToUpper(source[0]), source.Substring(1).ToLower());
     }
 }

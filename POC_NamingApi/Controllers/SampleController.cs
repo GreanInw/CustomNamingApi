@@ -13,11 +13,10 @@ namespace POC_NamingApi.Controllers
         public IActionResult Post([FromForm] SamplePostRequest request) => Ok(request);
     }
 
+    [SnakeCaseObject]
     public class SampleRequest
     {
         public int Id { get; set; }
-
-        [FromQuery(Name = "first_name")]
         public string FirstName { get; set; }
         public string LastName { get; set; }
     }
@@ -28,5 +27,14 @@ namespace POC_NamingApi.Controllers
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime? Birthday { get; set; }
+        public IFormFile ProfileImage { get; set; }
+        public RoleRequest RoleInfo { get; set; } = new RoleRequest();
+        public IEnumerable<RoleRequest> Roles { get; set; } = new List<RoleRequest>();
+
+        public class RoleRequest
+        {
+            public string RoleName { get; set; }
+            public string RoleNameDescription { get; set; }
+        }
     }
 }
