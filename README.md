@@ -1,4 +1,4 @@
-# Custom Naming Parameters Api (Release ver. coming soon)
+# Custom Naming Parameters Api (Release version coming soon)
 Auto rename parameter format to SnakeCase only
 
 # Step - 1 : Register service for rename parameters in Program.cs
