@@ -4,6 +4,8 @@
     {
         public static object ConvertTo(string value, Type type)
         {
+            if (type == typeof(string)) return value;
+
             var underlyingType = Nullable.GetUnderlyingType(type);
             bool isNullable = underlyingType is not null;
             var validateNumberic = new ValidateNumeric(value, isNullable, isNullable ? underlyingType : type);
@@ -13,8 +15,7 @@
                 //If is nullable type and null value return null, otherwise return value.
                 return validateNumberic.Value;
             }
-            else
-            if (type == typeof(DateTime) || type == typeof(DateTime?))
+            else if (type == typeof(DateTime) || type == typeof(DateTime?))
             {
                 return DateTime.TryParse(value, out DateTime newValue) ? newValue
                     : (isNullable ? null : DateTime.MinValue);
