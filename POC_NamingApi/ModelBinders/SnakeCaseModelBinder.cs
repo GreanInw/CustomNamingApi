@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
+﻿using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.Extensions.Options;
-using POC_NamingApi.Attributes;
 using POC_NamingApi.Controllers;
 using POC_NamingApi.Helpers;
 using System.Globalization;
@@ -62,7 +60,7 @@ namespace POC_NamingApi.ModelBinders
             //    property.SetValue(model, newValue);
             //}
             //bindingContext.Result = ModelBindingResult.Success(model);
-            var options = bindingContext.HttpContext.RequestServices.GetService<IOptions<MvcOptions>>();
+            //var options = bindingContext.HttpContext.RequestServices.GetService<IOptions<MvcOptions>>();
 
             //if (_modelBinder is not null)
             //{
@@ -74,6 +72,8 @@ namespace POC_NamingApi.ModelBinders
 
             //    await _modelBinder.BindModelAsync(bindingContext);
             //}
+
+
         }
 
         protected object GetFiles(HttpContext context, Type propertyType, string name)
@@ -111,121 +111,42 @@ namespace POC_NamingApi.ModelBinders
             => new(context.RequestServices.GetService<ILoggerFactory>());
     }
 
-    //public class SnakeCaseModelBinderProvider : IModelBinderProvider
-    //{
-    //    public IModelBinder GetBinder(ModelBinderProviderContext context)
-    //    {
-    //        var metadata = context.Metadata;
-    //        if (metadata.IsComplexType && !metadata.IsCollectionType)
-    //        {
-    //            //var parameters = GetParameterBinders(context);
-    //            var propertyBinders = new Dictionary<ModelMetadata, IModelBinder>();
-    //            //for (var i = 0; i < context.Metadata.Properties.Count; i++)
-    //            //{
-    //            //    var property = context.Metadata.Properties[i];
-    //            //    propertyBinders.Add(property, context.CreateBinder(property));
-    //            //}
-
-    //            //context.CreateBinder()
-
-    //            //var property = context.Metadata.Properties[1];
-    //            //new DefaultModelMetadata()
-
-
-    //            //for (var i = 0; i < context.Metadata.Properties.Count; i++)
-    //            //{
-    //            //    var property = context.Metadata.Properties[i];
-
-    //            //    propertyBinders.Add(property, context.CreateBinder(property));
-    //            //}
-
-    //            var binder = new ComplexObjectModelBinderProvider().GetBinder(context);
-    //            return binder is null ? null : new SnakeCaseModelBinder(binder);
-    //        }
-    //        return null;
-    //    }
-
-    //    private static IReadOnlyList<IModelBinder> GetParameterBinders(ModelBinderProviderContext context)
-    //    {
-    //        var boundConstructor = context.Metadata.BoundConstructor;
-    //        if (boundConstructor is null)
-    //        {
-    //            return Array.Empty<IModelBinder>();
-    //        }
-
-    //        var parameterBinders = boundConstructor.BoundConstructorParameters!.Count == 0 ?
-    //            Array.Empty<IModelBinder>() :
-    //            new IModelBinder[boundConstructor.BoundConstructorParameters.Count];
-
-    //        for (var i = 0; i < parameterBinders.Length; i++)
-    //        {
-    //            parameterBinders[i] = context.CreateBinder(boundConstructor.BoundConstructorParameters[i]);
-    //        }
-
-    //        return parameterBinders;
-    //    }
-    //}
-
-    public class SnakeCaseFormValueProviderFactory : IValueProviderFactory
+    public class SnakeCaseModelBinderProvider : IModelBinderProvider
     {
-        public async Task CreateValueProviderAsync(ValueProviderFactoryContext context)
+        public IModelBinder GetBinder(ModelBinderProviderContext context)
         {
-            if (!context.ActionContext.HttpContext.Request.HasFormContentType) return;
-
-            foreach (var parameter in context.ActionContext.ActionDescriptor.Parameters)
+            var metadata = context.Metadata;
+            if (metadata.IsComplexType && !metadata.IsCollectionType)
             {
-                if (!parameter.ParameterType.CustomAttributes.Any(w => w.AttributeType == typeof(SnakeCaseObjectAttribute)))
+                var bound = context.Metadata.BoundConstructor;
+                for (var i = 0; i < context.Metadata.Properties.Count; i++)
                 {
-                    continue;
-                }
-
-                //var properties = parameter.ParameterType.GetProperties();
-                var form = await ReadFormAsync(context.ActionContext);
-                var valueProvider = new FormValueProvider(BindingSource.Form
-                    , CreateNewFormCollection(form)
-                    , CultureInfo.CurrentCulture);
-
-                context.ValueProviders.Add(valueProvider);
-            }
-        }
-
-        private static async Task<IFormCollection> ReadFormAsync(ActionContext actionContext)
-        {
-            try
-            {
-                return await actionContext.HttpContext.Request.ReadFormAsync();
-            }
-            catch (InvalidDataException ex)
-            {
-                throw new ValueProviderException(string.Format("Failed to read the request form. {0}", ex.Message), ex);
-            }
-            catch (IOException ex)
-            {
-                throw new ValueProviderException(string.Format("Failed to read the request form. {0}", ex.Message), ex);
-            }
-        }
-
-        private IFormCollection CreateNewFormCollection(IFormCollection form
-            )
-            //, IEnumerable<PropertyInfo> properties)
-        {
-            //var propertyNames = properties.Select(s => s.Name);
-            var fields = form.ToDictionary(s => s.Key.SnakeCaseToPascalCase(), v => v.Value);
-            var files = new FormFileCollection();
-
-            foreach (var item in form.Files)
-            {
-                using (var stream = item.OpenReadStream())
-                {
-                    var file = new FormFile(stream, stream.Position, item.Length
-                        , item.Name.SnakeCaseToPascalCase(), item.FileName)
-                    {
-                        Headers = item.Headers
-                    };
-                    files.Add(file);
+                    var property = context.Metadata.Properties[i];
+                    
                 }
             }
-            return new FormCollection(fields, files);
+
+            return null;
         }
+
+        //private static IReadOnlyList<IModelBinder> GetParameterBinders(ModelBinderProviderContext context)
+        //{
+        //    var boundConstructor = context.Metadata.BoundConstructor;
+        //    if (boundConstructor is null)
+        //    {
+        //        return Array.Empty<IModelBinder>();
+        //    }
+
+        //    var parameterBinders = boundConstructor.BoundConstructorParameters!.Count == 0 ?
+        //        Array.Empty<IModelBinder>() :
+        //        new IModelBinder[boundConstructor.BoundConstructorParameters.Count];
+
+        //    for (var i = 0; i < parameterBinders.Length; i++)
+        //    {
+        //        parameterBinders[i] = context.CreateBinder(boundConstructor.BoundConstructorParameters[i]);
+        //    }
+
+        //    return parameterBinders;
+        //}
     }
 }

@@ -10,10 +10,10 @@ builder.Services.AddNamingSnakeCaseRequest();
 
 builder.Services.AddControllers(options =>
 {
-    //options.ModelMetadataDetailsProviders.Insert(0, new SnakeCaseBindingMetadataProvider());
-    //options.ModelBinderProviders.Insert(0, new SnakeCaseModelBinderProvider());
-
     //options.Filters.Add<SnakeCaseActionFilter>(0);
+    //options.ModelMetadataDetailsProviders.Insert(0, new SnakeCaseBindingMetadataProvider());
+
+    //options.ModelBinderProviders.Insert(0, new SnakeCaseModelBinderProvider());
 
     options.ValueProviderFactories.Insert(0, new SnakeCaseFormValueProviderFactory());
 

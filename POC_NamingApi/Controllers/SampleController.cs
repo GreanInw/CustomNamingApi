@@ -8,14 +8,14 @@ namespace POC_NamingApi.Controllers
     [ApiController, Route("sample")]
     public class SampleController : ControllerBase
     {
-        [HttpGet]
-        public IActionResult Get([FromQuery] SampleRequest request) => Ok(request);
+        //[HttpGet]
+        //public IActionResult Get([FromQuery] SampleRequest request) => Ok(request);
 
         [HttpPost]
-        public IActionResult Post([FromForm] SamplePostRequest request, [FromForm] SamplePostRequest request2) => Ok(request);
+        public IActionResult Post([FromForm] SamplePostRequest request) => Ok(request);
 
-        [HttpPost("original")]
-        public IActionResult Post([FromForm] OriginalRequest request) => Ok(request);
+        //[HttpPost("original")]
+        //public IActionResult Post([FromForm] OriginalRequest request) => Ok(request);
     }
 
     [SnakeCaseObject]
