@@ -29,6 +29,7 @@ namespace POC_NamingApi.Controllers
     [SnakeCaseObject]
     public class SamplePostRequest
     {
+        [FromForm(Name = "first_name")]
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime? Birthday { get; set; }
