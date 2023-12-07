@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
 using POC_NamingApi.Attributes;
+using POC_NamingApi.Builders;
 using System.Globalization;
 using System.Text;
 
@@ -92,40 +93,27 @@ namespace POC_NamingApi.ModelBinders
     public class SnakeCaseFormValueBinderProvider : FormValueProvider, IValueProvider
     {
         public SnakeCaseFormValueBinderProvider(BindingSource bindingSource, IFormCollection values, CultureInfo culture)
-            : base(bindingSource, values, culture)
-        {
-        }
+            : base(bindingSource, values, culture) { }
+
+        //public override bool ContainsPrefix(string prefix)
+        //{
+        //    return base.ContainsPrefix(SnakeCaseBuilder.Build(prefix));
+        //}
 
         public override bool ContainsPrefix(string prefix)
         {
-            return base.ContainsPrefix(ConvertToSnakeCase(prefix));
-        }
-
-        public override IDictionary<string, string> GetKeysFromPrefix(string prefix)
-        {
-            return base.GetKeysFromPrefix(prefix.ToSnakeCase());
+            return base.ContainsPrefix(prefix);
         }
 
         public override ValueProviderResult GetValue(string key)
         {
-            return base.GetValue(ConvertToSnakeCase(key));
+            return base.GetValue(key);
         }
 
-        private string ConvertToSnakeCase(string value)
-        {
-            if (!value.Contains('.'))
-            {
-                return value.ToSnakeCase();
-            }
+        //public override ValueProviderResult GetValue(string key)
+        //{
+        //    return base.GetValue(SnakeCaseBuilder.Build(key));
+        //}
 
-            var names = value.Split('.');
-            var builder = new StringBuilder();
-            foreach (var name in names)
-            {
-                builder.AppendFormat("{0}{1}", builder.Length == 0 ? "" : ".", name.ToSnakeCase());
-            }
-
-            return builder.ToString();
-        }
     }
 }

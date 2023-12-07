@@ -11,11 +11,10 @@ builder.Services.AddNamingSnakeCaseRequest();
 builder.Services.AddControllers(options =>
 {
     //options.Filters.Add<SnakeCaseActionFilter>(0);
-    //options.ModelMetadataDetailsProviders.Insert(0, new SnakeCaseBindingMetadataProvider());
+    options.ModelMetadataDetailsProviders.Insert(0, new SnakeCaseMetadataProvider());
 
     //options.ModelBinderProviders.Insert(0, new SnakeCaseModelBinderProvider());
-
-    options.ValueProviderFactories.Insert(0, new SnakeCaseFormValueProviderFactory());
+    //options.ValueProviderFactories.Insert(0, new SnakeCaseFormValueProviderFactory());
 
 }).AddSnakeCaseJsonResponse();
 
