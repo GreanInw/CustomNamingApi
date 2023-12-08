@@ -17,7 +17,8 @@ namespace NamingApi.SnakeCase.Extensions
         public static IServiceCollection AddSnakeCaseRequestResponse(this IServiceCollection services)
         {
             services.AddSnakeCaseRequest()
-                .AddSnakeCaseJsonResponse();
+                .AddSnakeCaseJsonResponse()
+                .AddIgnoreRequest();
 
             return services;
         }
@@ -44,9 +45,9 @@ namespace NamingApi.SnakeCase.Extensions
             return services;
         }
 
-        internal static IServiceCollection AddSnakeCaseRequestInternal(this IServiceCollection services)
+        public static IServiceCollection AddIgnoreRequest(this IServiceCollection services)
         {
-            services.TryAddEnumerable(ServiceDescriptor.Transient<IApiDescriptionProvider, SnakeCaseQueryParametersApiDescriptionProvider>());
+            services.TryAddEnumerable(ServiceDescriptor.Transient<IApiDescriptionProvider, IgnoreRequestApiDescriptionProvider>());
             return services;
         }
     }

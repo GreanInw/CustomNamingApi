@@ -1,10 +1,12 @@
-﻿using NamingApi.SnakeCase.Attributes;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using NamingApi.SnakeCase.Attributes;
 
 namespace POC_NamingApi.DTOs
 {
     //[SnakeCaseObject]
     public class ExampleGetRequest
     {
+        [BindNever]
         [SnakeCaseName("id")]
         public int Id { get; set; }
         [SnakeCaseName("first_name")]

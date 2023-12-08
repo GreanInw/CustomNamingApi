@@ -15,15 +15,8 @@ namespace POC_NamingApi.Controllers
         [HttpPost("per_property")]
         public IActionResult PerProperty([FromForm] ExamplePostPerPropertyRequest request) => Ok(request);
 
-        //[HttpPost("original")]
-        //public IActionResult Post([FromForm] OriginalRequest request) => Ok(request);
-    }
+        [HttpPost("by_json")]
+        public IActionResult PostJson([FromBody] ExampleJsonRequest request) => Ok(request);
 
-    //public class OriginalRequest
-    //{
-    //    public string FirstName { get; set; }
-    //    public IEnumerable<IFormFile> Files { get; set; }
-    //    public IFormFileCollection FileCollection { get; set; }
-    //    public IEnumerable<RoleRequest> Roles { get; set; } = new List<RoleRequest>();
-    //}
+    }
 }

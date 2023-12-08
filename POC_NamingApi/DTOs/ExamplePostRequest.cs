@@ -1,10 +1,12 @@
-﻿using NamingApi.SnakeCase.Attributes;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using NamingApi.SnakeCase.Attributes;
 
 namespace POC_NamingApi.DTOs
 {
     [SnakeCaseObject]
     public class ExamplePostRequest
     {
+        [BindNever]
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime? Birthday { get; set; }

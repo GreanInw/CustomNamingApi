@@ -1,9 +1,11 @@
-﻿using NamingApi.SnakeCase.Attributes;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using NamingApi.SnakeCase.Attributes;
 
 namespace POC_NamingApi.DTOs
 {
     public class ExamplePostPerPropertyRequest
     {
+        [BindNever]
         [SnakeCaseName("first_name")]
         public string FirstName { get; set; }
 

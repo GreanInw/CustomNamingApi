@@ -1,19 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using NamingApi.SnakeCase.Builders;
-using NamingApi.SnakeCase.Helpers;
+﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 
 namespace NamingApi.SnakeCase.ApiExplorer
 {
     /// <summary>
-    /// Rename parameter from <see cref="FromFormAttribute"/>, <see cref="FromQueryAttribute"/> 
-    /// to naming snake_case.
+    /// Ignore request parameter with <see cref="BindNeverAttribute"/>.
     /// </summary>
-    internal class SnakeCaseQueryParametersApiDescriptionProvider : IApiDescriptionProvider
+    internal class IgnoreRequestApiDescriptionProvider : IApiDescriptionProvider
     {
-        public SnakeCaseQueryParametersApiDescriptionProvider() : this(0) { }
+        public IgnoreRequestApiDescriptionProvider() : this(0) { }
 
-        public SnakeCaseQueryParametersApiDescriptionProvider(int order)
+        public IgnoreRequestApiDescriptionProvider(int order)
         {
             Order = order;
         }
@@ -24,23 +22,19 @@ namespace NamingApi.SnakeCase.ApiExplorer
 
         public void OnProvidersExecuting(ApiDescriptionProviderContext context)
         {
-            foreach (var request in context.Results)//Pre-request
+            foreach (var request in context.Results)//Per-request
             {
-                foreach (var parameter in request.ParameterDescriptions)//Parameter of request
+                static bool predicate(ApiParameterDescription w)
+                    => w.ModelMetadata is not null
+                        && w.ModelMetadata is DefaultModelMetadata model
+                        && model.Attributes.Attributes.Any(a => a.GetType() == typeof(BindNeverAttribute));
+
+                var ignoreParameters = request.ParameterDescriptions
+                    .Where(predicate).ToList();
+
+                foreach (var item in ignoreParameters)
                 {
-                    bool hasSnakeCaseObjectAttr = SnakeCaseNamingHelper.HasSnakeCaseObjectAttribute(request);
-                    bool hasSnakeCaseNameAttr = SnakeCaseNamingHelper.HasSnakeCaseNameAttribute(parameter);
-
-                    if (!hasSnakeCaseObjectAttr && !hasSnakeCaseNameAttr)
-                    {
-                        continue;
-                    }
-
-                    string newName = hasSnakeCaseObjectAttr ? SnakeCaseBuilder.Build(parameter.Name)
-                        : (!hasSnakeCaseNameAttr ? null
-                            : SnakeCaseNamingHelper.GetSnakeCaseNameAttribute(parameter)?.Name);
-
-                    parameter.Name = newName;
+                    request.ParameterDescriptions.Remove(item);
                 }
             }
         }
