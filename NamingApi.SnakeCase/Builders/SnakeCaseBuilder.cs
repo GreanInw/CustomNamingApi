@@ -1,10 +1,11 @@
-﻿using System.Text;
+﻿using NamingApi.SnakeCase.Extensions;
+using System.Text;
 
-namespace POC_NamingApi.Builders
+namespace NamingApi.SnakeCase.Builders
 {
-    public sealed class SnakeCaseBuilder
+    internal sealed class SnakeCaseBuilder
     {
-        internal const char CombineSymbol = '.';
+        public const char CombineSymbol = '.';
 
         public static string Build(string source)
             => IsNestedProperties(source) ? BuildNestedProperties(source) : source.ToSnakeCase();

@@ -1,4 +1,4 @@
-﻿namespace POC_NamingApi.Attributes
+﻿namespace NamingApi.SnakeCase.Attributes
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
     public class IgnoreSnakeCaseAttribute : Attribute
