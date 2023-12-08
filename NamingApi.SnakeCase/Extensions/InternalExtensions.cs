@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace POC_NamingApi.Extensions
+namespace NamingApi.SnakeCase.Extensions
 {
     public static class InternalExtensions
     {

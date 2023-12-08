@@ -1,7 +1,7 @@
-﻿using POC_NamingApi.Helpers;
+﻿using NamingApi.SnakeCase.Helpers;
 using System.Text.Json;
 
-namespace POC_NamingApi.NamingPolicy
+namespace NamingApi.SnakeCase.Json
 {
     public sealed class SnakeCaseJsonNamingPolicy : JsonNamingPolicy
     {

@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using POC_NamingApi.Helpers;
-using POC_NamingApi.NamingPolicy;
+using NamingApi.SnakeCase.ApiExplorer;
+using NamingApi.SnakeCase.Helpers;
+using NamingApi.SnakeCase.Json;
 using System.Text.Json.Serialization;
 
-namespace POC_NamingApi.Extensions
+namespace NamingApi.SnakeCase.Extensions
 {
     public static class SnakeCaseNamingExtensions
     {

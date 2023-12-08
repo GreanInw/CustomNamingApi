@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using POC_NamingApi.Builders;
-using POC_NamingApi.Helpers;
+using NamingApi.SnakeCase.Builders;
+using NamingApi.SnakeCase.Helpers;
 
-namespace POC_NamingApi.Filters
+namespace NamingApi.SnakeCase.ApiExplorer
 {
     /// <summary>
     /// Rename parameter from <see cref="FromFormAttribute"/>, <see cref="FromQueryAttribute"/> 
