@@ -11,6 +11,13 @@ namespace NamingApi.SnakeCase.ApiExplorer
     /// </summary>
     public class SnakeCaseQueryParametersApiDescriptionProvider : IApiDescriptionProvider
     {
+        public SnakeCaseQueryParametersApiDescriptionProvider() : this(0) { }
+
+        public SnakeCaseQueryParametersApiDescriptionProvider(int order)
+        {
+            Order = order;
+        }
+
         public int Order { get; }
 
         public void OnProvidersExecuted(ApiDescriptionProviderContext context) { }
@@ -21,11 +28,19 @@ namespace NamingApi.SnakeCase.ApiExplorer
             {
                 foreach (var parameter in request.ParameterDescriptions)//Parameter of request
                 {
-                    if (!SnakeCaseNamingHelper.IsSnakeCaseObject(request))
+                    bool hasSnakeCaseObjectAttr = SnakeCaseNamingHelper.HasSnakeCaseObjectAttribute(request);
+                    bool hasSnakeCaseNameAttr = SnakeCaseNamingHelper.HasSnakeCaseNameAttribute(parameter);
+
+                    if (!hasSnakeCaseObjectAttr && !hasSnakeCaseNameAttr)
                     {
                         continue;
                     }
-                    parameter.Name = SnakeCaseBuilder.Build(parameter.Name);
+
+                    string newName = hasSnakeCaseObjectAttr ? SnakeCaseBuilder.Build(parameter.Name)
+                        : (!hasSnakeCaseNameAttr ? null
+                            : SnakeCaseNamingHelper.GetSnakeCaseNameAttribute(parameter)?.Name);
+
+                    parameter.Name = newName;
                 }
             }
         }

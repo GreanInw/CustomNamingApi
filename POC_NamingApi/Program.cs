@@ -1,4 +1,5 @@
-using POC_NamingApi.ModelBinders;
+using NamingApi.SnakeCase.Extensions;
+using NamingApi.SnakeCase.Metadata;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddNamingSnakeCaseRequest();
+builder.Services.AddSnakeCaseRequestResponse();
 
 builder.Services.AddControllers(options =>
 {
@@ -16,7 +17,7 @@ builder.Services.AddControllers(options =>
     //options.ModelBinderProviders.Insert(0, new SnakeCaseModelBinderProvider());
     //options.ValueProviderFactories.Insert(0, new SnakeCaseFormValueProviderFactory());
 
-}).AddSnakeCaseJsonResponse();
+});
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())

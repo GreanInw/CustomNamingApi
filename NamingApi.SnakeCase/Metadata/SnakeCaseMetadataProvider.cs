@@ -1,31 +1,31 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
-using NamingApi.SnakeCase.Extensions;
+using NamingApi.SnakeCase.Attributes;
+using NamingApi.SnakeCase.Builders;
 using NamingApi.SnakeCase.Helpers;
 
 namespace NamingApi.SnakeCase.Metadata
 {
     public class SnakeCaseMetadataProvider : IBindingMetadataProvider
     {
+        public const int DefaultOrder = 0;
+
         public void CreateBindingMetadata(BindingMetadataProviderContext context)
         {
-            if (IsSnakeCaseObject(context.Key))
-            {
-                context.BindingMetadata.BinderModelName = context.Key.Name.ToSnakeCase();
-            }
-        }
+            bool isSnakeCaseObjectAttr = SnakeCaseNamingHelper.HasSnakeCaseObjectAttribute(context.Key);
+            bool isSnakeCaseNameAttr = SnakeCaseNamingHelper.HasSnakeCaseNameAttribute(context.Key.PropertyInfo);
 
-        private bool IsSnakeCaseObject(ModelMetadataIdentity modelMetadata)
-        {
-            if (modelMetadata.ContainerType is null)
+            if (!isSnakeCaseObjectAttr && !isSnakeCaseNameAttr)
             {
-                return false;
+                return;
             }
 
-            var isDeclareSnakeCaseObject = modelMetadata.ContainerType.DeclaringType is null
-                ? false : SnakeCaseNamingHelper.IsSnakeCaseObject(modelMetadata.ContainerType.DeclaringType);
+            var nameAttribute = !isSnakeCaseNameAttr ? null
+                : (SnakeCaseNameAttribute)context.Attributes
+                    .FirstOrDefault(w => w.GetType() == typeof(SnakeCaseNameAttribute));
 
-            return SnakeCaseNamingHelper.IsSnakeCaseObject(modelMetadata.ContainerType) 
-                || isDeclareSnakeCaseObject;
+            context.BindingMetadata.BinderModelName = isSnakeCaseObjectAttr
+                ? SnakeCaseBuilder.Build(context.Key.Name)
+                : nameAttribute.Name;
         }
     }
 }

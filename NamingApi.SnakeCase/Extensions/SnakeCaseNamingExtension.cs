@@ -12,7 +12,14 @@ namespace NamingApi.SnakeCase.Extensions
     {
         public static string ToSnakeCase(this string name) => SnakeCaseNamingHelper.ChangeTo(name);
 
-        public static IMvcBuilder AddSnakeCaseJsonResponse(this IMvcBuilder builder)
+        public static IServiceCollection AddSnakeCaseRequestResponse(this IServiceCollection services)
+        {
+            //services.AddSnakeCaseRequest();
+            services.AddMvc().AddSnakeCaseJsonResponse();
+            return services;
+        }
+
+        internal static IMvcBuilder AddSnakeCaseJsonResponse(this IMvcBuilder builder)
         {
             builder.AddJsonOptions(options =>
             {
@@ -24,7 +31,7 @@ namespace NamingApi.SnakeCase.Extensions
             return builder;
         }
 
-        public static IServiceCollection AddNamingSnakeCaseRequest(this IServiceCollection services)
+        internal static IServiceCollection AddSnakeCaseRequest(this IServiceCollection services)
         {
             services.TryAddEnumerable(ServiceDescriptor.Transient<IApiDescriptionProvider, SnakeCaseQueryParametersApiDescriptionProvider>());
             return services;
