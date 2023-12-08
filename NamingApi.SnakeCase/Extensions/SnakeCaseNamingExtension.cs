@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 using NamingApi.SnakeCase.ApiExplorer;
 using NamingApi.SnakeCase.Helpers;
 using NamingApi.SnakeCase.Json;
+using NamingApi.SnakeCase.Metadata;
 using System.Text.Json.Serialization;
 
 namespace NamingApi.SnakeCase.Extensions
@@ -14,24 +16,35 @@ namespace NamingApi.SnakeCase.Extensions
 
         public static IServiceCollection AddSnakeCaseRequestResponse(this IServiceCollection services)
         {
-            //services.AddSnakeCaseRequest();
-            services.AddMvc().AddSnakeCaseJsonResponse();
+            services.AddSnakeCaseRequest()
+                .AddSnakeCaseJsonResponse();
+
             return services;
         }
 
-        internal static IMvcBuilder AddSnakeCaseJsonResponse(this IMvcBuilder builder)
+        public static IServiceCollection AddSnakeCaseRequest(this IServiceCollection services)
         {
-            builder.AddJsonOptions(options =>
+            services.AddControllers(options =>
+            {
+                options.ModelMetadataDetailsProviders
+                    .Insert(SnakeCaseMetadataProvider.DefaultOrder, new SnakeCaseMetadataProvider());
+            });
+            return services;
+        }
+
+        public static IServiceCollection AddSnakeCaseJsonResponse(this IServiceCollection services)
+        {
+            services.AddControllers().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.DictionaryKeyPolicy = SnakeCaseJsonNamingPolicy.Instance;
                 options.JsonSerializerOptions.PropertyNamingPolicy = SnakeCaseJsonNamingPolicy.Instance;
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
 
-            return builder;
+            return services;
         }
 
-        internal static IServiceCollection AddSnakeCaseRequest(this IServiceCollection services)
+        internal static IServiceCollection AddSnakeCaseRequestInternal(this IServiceCollection services)
         {
             services.TryAddEnumerable(ServiceDescriptor.Transient<IApiDescriptionProvider, SnakeCaseQueryParametersApiDescriptionProvider>());
             return services;

@@ -9,7 +9,7 @@ namespace NamingApi.SnakeCase.ApiExplorer
     /// Rename parameter from <see cref="FromFormAttribute"/>, <see cref="FromQueryAttribute"/> 
     /// to naming snake_case.
     /// </summary>
-    public class SnakeCaseQueryParametersApiDescriptionProvider : IApiDescriptionProvider
+    internal class SnakeCaseQueryParametersApiDescriptionProvider : IApiDescriptionProvider
     {
         public SnakeCaseQueryParametersApiDescriptionProvider() : this(0) { }
 

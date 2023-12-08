@@ -6,8 +6,8 @@ namespace POC_NamingApi.Controllers
     [ApiController, Route("sample")]
     public class SampleController : ControllerBase
     {
-        //[HttpGet]
-        //public IActionResult Get([FromQuery] SampleRequest request) => Ok(request);
+        [HttpGet]
+        public IActionResult Get([FromQuery] ExampleGetRequest request) => Ok(request);
 
         [HttpPost]
         public IActionResult Post([FromForm] ExamplePostRequest request) => Ok(request);
@@ -18,13 +18,6 @@ namespace POC_NamingApi.Controllers
         //[HttpPost("original")]
         //public IActionResult Post([FromForm] OriginalRequest request) => Ok(request);
     }
-
-    //public class SampleRequest
-    //{
-    //    public int Id { get; set; }
-    //    public string FirstName { get; set; }
-    //    public string LastName { get; set; }
-    //}
 
     //public class OriginalRequest
     //{

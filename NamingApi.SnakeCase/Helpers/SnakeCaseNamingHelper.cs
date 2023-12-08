@@ -41,7 +41,16 @@ namespace NamingApi.SnakeCase.Helpers
             => type?.GetCustomAttribute<SnakeCaseObjectAttribute>();
 
         public static SnakeCaseObjectAttribute GetSnakeCaseObjectAttribute(ModelMetadataIdentity metadataIdentity)
-            => metadataIdentity.ContainerType is null ? null : GetSnakeCaseObjectAttribute(metadataIdentity.ContainerType);
+        {
+            if (metadataIdentity.ContainerType is null)
+            {
+                return null;
+            }
+
+            return GetSnakeCaseObjectAttribute(metadataIdentity.ContainerType)
+                ?? (metadataIdentity.ContainerType.DeclaringType is null ? null
+                    : GetSnakeCaseObjectAttribute(metadataIdentity.ContainerType.DeclaringType));
+        }
 
         public static SnakeCaseNameAttribute GetSnakeCaseNameAttribute(Type type)
             => type?.GetCustomAttribute<SnakeCaseNameAttribute>();
